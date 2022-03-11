@@ -7,8 +7,15 @@ pipeline {
         stage("buildApp"){
             steps{
                 script {
-                    sh "./mvnw jetty:run-wa"
+                    sh "./mvnw package"
                     
+                }
+            }
+        }
+        stage("codeAnalysis"){
+            steps{
+                script {
+                    sh "/opt/sonar/bin/sonar-scanner "
                 }
             }
         }
