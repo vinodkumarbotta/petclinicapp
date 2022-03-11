@@ -7,7 +7,8 @@ pipeline {
         stage("buildApp"){
             steps{
                 script {
-                    sh "./mvnw package"
+                    sh "./mvnw jetty:run-wa"
+                    
                 }
             }
         }
