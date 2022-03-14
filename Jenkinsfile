@@ -14,7 +14,7 @@ pipeline {
         }
         stage("codeAnalysis"){
           environment {
-              def sonarHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+              def sonarHome = tool name: 'SonarScanner'
 
             }
             
