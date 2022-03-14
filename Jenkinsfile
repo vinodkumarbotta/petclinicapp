@@ -16,7 +16,7 @@ pipeline {
           environment {
               def sonarHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 
-          }
+            }
             
             steps{
                 script {
