@@ -31,7 +31,8 @@ pipeline {
         }
         stage("Artifacts"){
              steps {
-                rtUpload (
+                script {
+                     rtUpload (
                     // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
                     serverId: Artifactory-1,
                     spec: """{
@@ -43,6 +44,9 @@ pipeline {
                                 ]
                             }"""
                 )
+
+                }
+               
             }
         }
     }
