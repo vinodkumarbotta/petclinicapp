@@ -5,7 +5,9 @@ pipeline {
         stage("buildApp"){
             steps{
                 script {
-                    sh "./mvnw package"
+                    sh """./mvnw package
+                         mv ./target/*.war ./target/petApp-${BUILD_NUMBER}.war
+                    """
                     
                 }
             }
@@ -28,10 +30,19 @@ pipeline {
             }
         }
         stage("Artifacts"){
-            steps{
-                script {
-                    echo "pushing to Artifactory"
-                }
+             steps {
+                rtUpload (
+                    // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
+                    serverId: Artifactory-1,
+                    spec: """{
+                            "files": [
+                                    {
+                                        "pattern": "./target/*.war",
+                                        "target": "petApp/buildResults"
+                                    }
+                                ]
+                            }"""
+                )
             }
         }
     }
