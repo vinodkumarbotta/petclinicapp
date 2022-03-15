@@ -19,9 +19,10 @@ pipeline {
             steps{
                 script {
                     sh "${sonarHome}/bin/sonar-scanner "
-
-                      timeout(time: 3, unit: 'MINUTES') {
-                      def qg = waitForQualityGate()
+                }
+                sleep time: 30000, unit: 'MILLISECONDS'
+                script {
+                        def qg = waitForQualityGate()
                         if (qg.status != 'OK') {
                             error "Pipeline aborted due to quality gate failure: ${qg.status}"
                         }
