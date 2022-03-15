@@ -1,9 +1,7 @@
 pipeline {
-
     agent any
 
     stages{
-
         stage("buildApp"){
             steps{
                 script {
@@ -13,14 +11,26 @@ pipeline {
             }
         }
         stage("codeAnalysis"){
-          environment {
+            environment {
               def sonarHome = tool name: 'SonarScanner'
-
             }
-            
             steps{
                 script {
                     sh "${sonarHome}/bin/sonar-scanner "
+                }
+            }
+        }
+        stage("checkQualityGate"){
+            steps{
+                script {
+                    echo "Checking QG"
+                }
+            }
+        }
+        stage("Artifacts"){
+            steps{
+                script {
+                    echo "pushing to Artifactory"
                 }
             }
         }
