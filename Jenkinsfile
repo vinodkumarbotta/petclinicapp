@@ -19,16 +19,21 @@ pipeline {
             steps{
                 script {
                     sh "${sonarHome}/bin/sonar-scanner "
+
+                      timeout(time: 3, unit: 'MINUTES') {
+                      def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
                 }
             }
         }
-        stage("checkQualityGate"){
-            steps{
-                script {
-                    echo "Checking QG"
-                }
-            }
-        }
+        // stage("Quality Gate") {
+        //     steps {
+        //         timeout(time: 3, unit: 'MINUTES') {
+        //         waitForQualityGate abortPipeline: true, credentialsId: 'sonartoken'}
+        //     }
+        // }
         stage("Artifacts"){
              steps {
                      rtUpload (
