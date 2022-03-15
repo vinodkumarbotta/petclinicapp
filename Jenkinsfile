@@ -31,7 +31,6 @@ pipeline {
         }
         stage("Artifacts"){
              steps {
-                //script {
                      rtUpload (
                     // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
                     serverId: "Artifactory-1",
@@ -39,15 +38,18 @@ pipeline {
                             "files": [
                                     {
                                         "pattern": "./target/*.war",
-                                        "target": "petApp/buildResults"
+                                        "target": "petApp/buildResults/"
                                     }
                                 ]
                             }"""
                 )
-
-//}
                
             }
+        }
+    }
+    post {
+        always {
+            cleanWs()
         }
     }
 }
