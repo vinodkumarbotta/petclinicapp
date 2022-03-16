@@ -47,17 +47,15 @@ pipeline {
             }
         }
         stage("Deploy-Test"){
-            steps{
-                script {
-                    sh "Deploying to Test Environment"
-                    
-                }
-            }
+          
             steps {
                 sshagent(credentials: ['aws-tomcat-creds']) {
-                        sh """                    
+                    script {
+                         sh """                    
                            scp -o StrictHostKeyChecking=no ./target/*.war 13.235.246.230:/opt/tomcat/webapps
                         """
+                    }
+                       
                 }
             }
         }
