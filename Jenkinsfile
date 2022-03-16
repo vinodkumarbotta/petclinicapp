@@ -29,15 +29,9 @@ pipeline {
                 }
             }
         }
-        // stage("Quality Gate") {
-        //     steps {
-        //         timeout(time: 3, unit: 'MINUTES') {
-        //         waitForQualityGate abortPipeline: true, credentialsId: 'sonartoken'}
-        //     }
-        // }
         stage("Artifacts"){
              steps {
-                     rtUpload (
+                rtUpload (
                     // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
                     serverId: "Artifactory-1",
                     spec: """{
@@ -52,7 +46,42 @@ pipeline {
                
             }
         }
+        stage("Deploy-Test"){
+            steps{
+                script {
+                    sh "Deploying to Test Environment"
+                    
+                }
+            }
+            steps {
+                sshagent(credentials: ['aws-tomcat-creds']) {
+                        sh """                    
+                           scp -o StrictHostKeyChecking=no ./target/*.war 13.235.246.230:/opt/tomcat/webapps
+                        """
+                }
+            }
+        }
+        stage("Deploy-UAT"){
+            steps{
+                script {
+                    sh "Deploying to Test Environment"
+                    
+                }
+            }
+        }
+        stage("Deploy-PRD"){
+            input{
+                 message "Do you want to proceed for production deployment?"
+            }
+            steps{
+                script {
+                    sh "Deploying to Test Environment"
+                    
+                }
+            }
+        }
     }
+
     post {
         always {
             cleanWs()
