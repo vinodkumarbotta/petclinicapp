@@ -46,13 +46,12 @@ pipeline {
                
             }
         }
-        stage("Deploy-Test"){
-          
+        stage("Deploy-Test"){  
             steps {
                 sshagent(credentials: ['aws-tomcat-creds']) {
                     script {
-                         sh """                    
-                          sudo  scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@13.235.246.230:/opt/tomcat/webapps
+                        sh """                    
+                             sudo  scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@13.235.246.230:/opt/tomcat/webapps
                         """
                     }
                        
@@ -60,10 +59,14 @@ pipeline {
             }
         }
         stage("Deploy-UAT"){
-            steps{
-                script {
-                    sh "Deploying to Test Environment"
-                    
+            steps {
+                sshagent(credentials: ['aws-tomcat-creds']) {
+                    script {
+                        sh """                    
+                             sudo  scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@3.108.196.172:/opt/tomcat/webapps
+                        """
+                    }
+                       
                 }
             }
         }
@@ -71,7 +74,16 @@ pipeline {
             input{
                  message "Do you want to proceed for production deployment?"
             }
-            steps{
+             steps {
+                sshagent(credentials: ['aws-tomcat-creds']) {
+                    script {
+                        sh """                    
+                             sudo  scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@65.2.124.215:/opt/tomcat/webapps
+                        """
+                    }
+                       
+                }
+            }steps{
                 script {
                     sh "Deploying to Test Environment"
                     
