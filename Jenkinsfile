@@ -52,7 +52,7 @@ pipeline {
                 sshagent(credentials: ['aws-tomcat-creds']) {
                     script {
                          sh """                    
-                           scp -o StrictHostKeyChecking=no ./target/*.war 13.235.246.230:/opt/tomcat/webapps
+                           scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@13.235.246.230:/opt/tomcat/webapps
                         """
                     }
                        
