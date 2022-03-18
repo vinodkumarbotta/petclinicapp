@@ -1,7 +1,7 @@
 pipeline {
     agent any
         triggers {
-        //cron '* * * * *'
+       // cron '* * * * *'
         GenericTrigger(
             genericVariables: [
             [key: 'ref', value: '$.ref']
@@ -50,5 +50,21 @@ pipeline {
                 echo "Running Code Analysis"
             }
         }
+    }
+
+    post {
+        aborted{
+           slackSend channel: '# jenkins-batch3', message: "*ABORTED:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+        }
+        failure {
+             slackSend channel: '# jenkins-batch3', message: "*FAILIED:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+        }
+        success{
+            slackSend channel: '# jenkins-batch3', message: "*SUCCESS:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+        }
+        always { 
+            cleanWs()
+        }
+
     }
 }
