@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+
+    stages{
+        stage("buildApp"){
+            steps{
+                script {
+                    sh """./mvnw package
+                         mv ./target/*.war ./target/petApp-${BUILD_NUMBER}.war
+                         ls -lrt ./target/petApp*.war
+                    """
+                    
+                }
+            }
+        }
+        stage("codeAnalysis"){
+            environment {
+              def sonarHome = tool name: 'SonarScanner'
+            }
+            steps {  
+                withSonarQubeEnv('sonarQubeServer') {
+                    sh "${sonarHome}/bin/sonar-scanner"
+                }
+                sleep time: 30000, unit: 'MILLISECONDS'
+                script {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                }
+            }
+        }
+        // stage("Deploy-Dev"){  
+        //     steps {
+        //         sshagent(credentials: ['aws-tomcat-creds']) {
+        //             script {
+        //                 sh """                    
+        //                      scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@13.235.246.230:/opt/tomcat/webapps
+        //                 """
+        //             }
+                       
+        //         }
+        //     }
+        // }
+        // stage("Deploy-UAT"){
+        //     steps {
+        //         sshagent(credentials: ['aws-tomcat-creds']) {
+        //             script {
+        //                 sh """                    
+        //                      scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@3.108.196.172:/opt/tomcat/webapps
+        //                 """
+        //             }
+                       
+        //         }
+        //     }
+        // }
+        // stage("Deploy-PRD"){
+        //     input{
+        //          message "Do you want to proceed for production deployment?"
+        //     }
+        //     steps {
+        //         sshagent(credentials: ['aws-tomcat-creds']) {
+        //             script {
+        //                 sh """                    
+        //                      scp -o StrictHostKeyChecking=no ./target/*.war ubuntu@65.2.124.215:/opt/tomcat/webapps
+        //                 """
+        //             }
+                       
+        //         }
+        //     }
+        // }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
