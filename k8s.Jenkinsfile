@@ -18,7 +18,7 @@ pipeline {
               def sonarHome = tool name: 'SonarScanner'
             }
             steps {  
-                withSonarQubeEnv('sonarQubeServer') {
+                withSonarQubeEnv('k8s-sonarqube') {
                     sh "${sonarHome}/bin/sonar-scanner"
                 }
                 sleep time: 30000, unit: 'MILLISECONDS'
