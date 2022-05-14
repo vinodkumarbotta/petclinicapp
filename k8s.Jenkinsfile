@@ -33,7 +33,7 @@ pipeline {
         stage("Build Docker"){  
             steps {
                 script {
-                    sh "docker build -t vsiraparapu/petApp:${BUILD_NUMBER} ."
+                    sh "docker build -t vsiraparapu/petapp:${BUILD_NUMBER} ."
                     sh "docker images |grep -i petApp"
                 }
             }
