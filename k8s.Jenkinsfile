@@ -30,6 +30,14 @@ pipeline {
                 }
             }
         }
+        stage("Build Docker"){  
+            steps {
+                script {
+                    sh "docker build -t vsiraparapu/petApp:${BUILD_NUMBER} ."
+                    sh "docker images |grep -i petApp"
+                }
+            }
+        }
         // stage("Deploy-Dev"){  
         //     steps {
         //         sshagent(credentials: ['aws-tomcat-creds']) {
