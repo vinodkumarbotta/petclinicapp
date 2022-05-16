@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: petclinicapp
+    labels:
+        app: petclinicapp
+        type: petclinicapp-dev
+spec:
+   selector:
+      matchLabels:
+         app: petclinicapp
+         type: petclinicapp-dev
+         
+   template: 
+       metadata: 
+          name: petclinicapp-pod
+          labels: 
+              app: petclinicapp
+              type: petclinicapp-dev
+
+       spec: 
+          containers:
+            - image:  vsiraparapu/petclinicapp:10
+              name:  petclinicapp
+              ports:
+                - containerPort: 8080
+          
+   replicas: 1
