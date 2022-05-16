@@ -6,6 +6,7 @@ metadata:
     labels:
         app: petclinicapp
         type: petclinicapp-dev
+        build_number: ${BUILD_NUMBER}
 spec:
    selector:
       matchLabels:
