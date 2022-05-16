@@ -1,6 +1,10 @@
 pipeline {
     agent any
-
+    environment {
+            registry = "vsiraparapu/petclinicapp"
+            registryCredential = 'venkat-dockerhub'
+            dockerImage = ''
+    }
     stages{
         stage("buildApp"){
             steps{
@@ -13,30 +17,52 @@ pipeline {
                 }
             }
         }
-        stage("codeAnalysis"){
-            environment {
-              def sonarHome = tool name: 'SonarScanner'
-            }
-            steps {  
-                withSonarQubeEnv('k8s-sonarqube') {
-                    sh "${sonarHome}/bin/sonar-scanner"
-                }
-                sleep time: 30000, unit: 'MILLISECONDS'
-                script {
-                        def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                        }
-                }
+        // stage("codeAnalysis"){
+        //     environment {
+        //       def sonarHome = tool name: 'SonarScanner'
+        //     }
+        //     steps {  
+        //         withSonarQubeEnv('k8s-sonarqube') {
+        //             sh "${sonarHome}/bin/sonar-scanner"
+        //         }
+        //         sleep time: 30000, unit: 'MILLISECONDS'
+        //         script {
+        //                 def qg = waitForQualityGate()
+        //                 if (qg.status != 'OK') {
+        //                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
+        //                 }
+        //         }
+        //     }
+        // }
+        // stage("Build Docker & Push"){  
+        //     steps {
+        //         script {
+        //             sh "docker build -t vsiraparapu/petapp:${BUILD_NUMBER} ."
+        //             sh "docker push vsiraparapu/petapp:${BUILD_NUMBER}"
+        //             sh "docker images |grep -i petApp"
+        //         }
+        //     }
+        // }
+        stage('Building image') {
+            steps{
+              script {
+                dockerImage = docker.build registry + ":$BUILD_NUMBER"
+              }
             }
         }
-        stage("Build Docker"){  
-            steps {
-                script {
-                    sh "docker build -t vsiraparapu/petapp:${BUILD_NUMBER} ."
-                    sh "docker images |grep -i petApp"
-                }
+        stage('Deploy Image') {
+          steps{
+            script {
+              docker.withRegistry( '', registryCredential ) {
+                dockerImage.push()
+              }
             }
+          }
+        }
+        stage('Remove Unused docker image') {
+          steps{
+            sh "docker rmi $registry:$BUILD_NUMBER"
+          }
         }
         // stage("Deploy-Dev"){  
         //     steps {
