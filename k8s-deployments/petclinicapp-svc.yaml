@@ -10,7 +10,7 @@ spec:
     type: LoadBalancer
     ports:
         - port: 80
-          targetPort: 9000
+          targetPort: 8080
     selector: 
       app: petclinicapp
       type: petclinicapp-dev

@@ -17,32 +17,23 @@ pipeline {
                 }
             }
         }
-        // stage("codeAnalysis"){
-        //     environment {
-        //       def sonarHome = tool name: 'SonarScanner'
-        //     }
-        //     steps {  
-        //         withSonarQubeEnv('k8s-sonarqube') {
-        //             sh "${sonarHome}/bin/sonar-scanner"
-        //         }
-        //         sleep time: 30000, unit: 'MILLISECONDS'
-        //         script {
-        //                 def qg = waitForQualityGate()
-        //                 if (qg.status != 'OK') {
-        //                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
-        //                 }
-        //         }
-        //     }
-        // }
-        // stage("Build Docker & Push"){  
-        //     steps {
-        //         script {
-        //             sh "docker build -t vsiraparapu/petapp:${BUILD_NUMBER} ."
-        //             sh "docker push vsiraparapu/petapp:${BUILD_NUMBER}"
-        //             sh "docker images |grep -i petApp"
-        //         }
-        //     }
-        // }
+        stage("codeAnalysis"){
+            environment {
+              def sonarHome = tool name: 'SonarScanner'
+            }
+            steps {  
+                withSonarQubeEnv('k8s-sonarqube') {
+                    sh "${sonarHome}/bin/sonar-scanner"
+                }
+                sleep time: 30000, unit: 'MILLISECONDS'
+                script {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                }
+            }
+        }
         stage('Building image') {
             steps{
               script {
@@ -64,6 +55,14 @@ pipeline {
             sh "docker rmi $registry:$BUILD_NUMBER"
           }
         }
+        stage('Deploy on Dev') {
+         steps {
+            script {
+               //env.PIPELINE_NAMESPACE = "test"
+               kubernetesDeploy kubeconfigId: 'k8s-config', configs: 'k8s-deployments/petclinicapp-deploy.yaml,k8s-deployments/petclinicapp-svc.yaml'
+            }
+         }
+      }
         // stage("Deploy-Dev"){  
         //     steps {
         //         sshagent(credentials: ['aws-tomcat-creds']) {
