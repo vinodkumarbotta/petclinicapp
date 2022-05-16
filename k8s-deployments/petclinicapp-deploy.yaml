@@ -20,9 +20,27 @@ spec:
 
        spec: 
           containers:
-            - image:  vsiraparapu/petclinicapp:13
+            - image:  vsiraparapu/petclinicapp:latest
               name:  petclinicapp
               ports:
                 - containerPort: 8080
           
    replicas: 1
+---
+apiVersion: v1
+kind: Service
+metadata: 
+   name: petclinceapp-svc
+   labels: 
+       app: petclinicapp
+       type: petclinceapp-svc
+
+spec: 
+    type: LoadBalancer
+    ports:
+        - port: 80
+          targetPort: 8080
+    selector: 
+      app: petclinicapp
+      type: petclinicapp-dev
+   
