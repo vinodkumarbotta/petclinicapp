@@ -20,7 +20,7 @@ spec:
 
        spec: 
           containers:
-            - image:  vsiraparapu/petclinicapp:10
+            - image:  vsiraparapu/petclinicapp:12
               name:  petclinicapp
               ports:
                 - containerPort: 8080
