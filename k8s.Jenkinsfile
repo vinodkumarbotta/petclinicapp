@@ -59,11 +59,11 @@ pipeline {
          steps {
             script {
                //env.PIPELINE_NAMESPACE = "test"
-               sh """
-               # export KUBECONFIG=/var/lib/jenkins/config
-                sed -i 's/petclinicapp:latest/petclinicapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml
-               # kubectl apply -f k8s-deployments/petclinicapp-deploy.yaml
-               """
+              //  sh """
+              //  # export KUBECONFIG=/var/lib/jenkins/config
+              //   sed -i 's/petclinicapp:latest/petclinicapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml
+              //  # kubectl apply -f k8s-deployments/petclinicapp-deploy.yaml
+              //  """
                kubernetesDeploy kubeconfigId: 'k8s-config', 
                configs: 'k8s-deployments/petclinicapp-deploy.yaml',
                enableConfigSubstitution: true
