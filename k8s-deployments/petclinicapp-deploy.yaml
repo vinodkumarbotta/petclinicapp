@@ -28,7 +28,7 @@ spec:
                 - containerPort: 8080
               readinessProbe: 
                   httpGet: 
-                     path: /
+                     path: /sample
                      port: 8080
           
    replicas: 1
