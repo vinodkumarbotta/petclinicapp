@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-      
+
             registry = "184.72.168.66:80"
             registryCredential = 'venkat-harborhub'
             dockerImage = ''
@@ -45,7 +45,8 @@ pipeline {
                     script {
                         sh """                    
                              sed -i 's/petapp:latest/petapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml
-                             scp -o StrictHostKeyChecking=no k8s-deployments/petclinicapp-deploy.yaml ubuntu@ec2-54-235-37-175.compute-1.amazonaws.com:/home/ubuntu
+                             scp -o StrictHostKeyChecking=no k8s-deployments/petclinicapp-deploy.yaml ubuntu@ec2-54-235-37-175.compute-1.amazonaws.com:/home/ubuntu/
+                             scp -o StrictHostKeyChecking=no ansible-deploy/deploy.sh ubuntu@ec2-54-235-37-175.compute-1.amazonaws.com:/home/ubuntu/
                         """
                     }
                        
