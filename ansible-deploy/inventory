@@ -1,2 +1,2 @@
-[k8s-master]
+[k8smaster]
 ec2-54-235-37-175.compute-1.amazonaws.com ansible_user=ubuntu
