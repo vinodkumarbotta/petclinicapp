@@ -3,14 +3,6 @@
 - hosts: k8s-master 
   become: True
   tasks:
-     - name: "Display"
-       cmd: "uname -a"
-       
-    #  - name: Clone a github repository
-    #    git:
-    #     repo: https://github.com/crazy4devops/spring-framework-petclinic.git
-    #     dest: /home/ubuntu
-    #     single_branch: yes
-    #     version: 'feature/test'
-    #     clone: yes
-    #     update: yes
+     - name: "Run k8s deployment"
+       shell: kubectl apply -f home/ubuntu/petclinicapp-deploy.yaml
+   
