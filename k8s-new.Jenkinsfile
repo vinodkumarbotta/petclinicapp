@@ -54,7 +54,7 @@ pipeline {
         }
         stage(" execute Ansible") {
           steps {
-                ansiblePlaybook credentialsId: 'ec2-user', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'inventory', playbook: 'k8s-deploy.yaml'
+                ansiblePlaybook credentialsId: 'ec2-user', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'ansible-deploy/sinventory', playbook: 'ansible-deploy/k8s-deploy.yaml'
           }    
         }  
         
