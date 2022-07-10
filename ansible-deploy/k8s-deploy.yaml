@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
      - name: Run k8s deployment
-       sh: /home/ubuntu/deploy.sh
+       shell: /home/ubuntu/deploy.sh
        register: result
      
    
