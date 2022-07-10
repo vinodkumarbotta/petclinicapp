@@ -6,7 +6,6 @@ metadata:
     labels:
         app: petclinicapp
         type: petclinicapp-dev
-        build_number: ${BUILD_NUMBER}
 spec:
    selector:
       matchLabels:
@@ -22,7 +21,8 @@ spec:
 
        spec: 
           containers:
-            - image:  184.72.168.66:80/javaapp/petclinicapp:latest
+            - image:  184.72.168.66:80/javaapp/petapp:latest
+              imagePullPolicy: Always
               name:  petclinicapp
               ports:
                 - containerPort: 8080
@@ -42,10 +42,12 @@ metadata:
        type: petclinceapp-svc
 
 spec: 
-    type: LoadBalancer
+    type: NodePort
     ports:
         - port: 80
           targetPort: 8080
+          nodePort: 30036
+          protocol: TCP
     selector: 
       app: petclinicapp
       type: petclinicapp-dev
