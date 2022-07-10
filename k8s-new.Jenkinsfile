@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-            registry = "184.72.168.66:80/javaapp"
+            registry = "/javaapp"
             registryCredential = 'venkat-harborhub'
             dockerImage = ''
     }
@@ -17,23 +17,6 @@ pipeline {
                 }
             }
         }
-        // stage("codeAnalysis"){
-        //     environment {
-        //       def sonarHome = tool name: 'SonarScanner'
-        //     }
-        //     steps {  
-        //         withSonarQubeEnv('k8s-sonarqube') {
-        //             sh "${sonarHome}/bin/sonar-scanner"
-        //         }
-        //         sleep time: 30000, unit: 'MILLISECONDS'
-        //         script {
-        //                 def qg = waitForQualityGate()
-        //                 if (qg.status != 'OK') {
-        //                     error "Pipeline aborted due to quality gate failure: ${qg.status}"
-        //                 }
-        //         }
-        //     }
-        // }
         stage('Building image') {
             steps{
               script {
