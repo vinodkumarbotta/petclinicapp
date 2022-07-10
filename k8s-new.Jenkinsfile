@@ -39,17 +39,11 @@ pipeline {
             sh "docker rmi $registry:$BUILD_NUMBER"
           }
         }
-        stage('Deploy on K8S') {
-         steps {
-            script {
-               sh "sed -i 's/petapp:latest/petapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml"
-               kubernetesDeploy kubeconfigId: 'k8s-harbor-config', 
-               configs: 'k8s-deployments/petclinicapp-deploy.yaml',
-               enableConfigSubstitution: true
-
-            }
-         }
-        }
+        stage(" execute Ansible") {
+          steps {
+                ansiblePlaybook credentialsId: 'ec2-user', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'inventory', playbook: 'k8s-deploy.yaml'
+          }    
+        }  
         
     }
 
