@@ -41,7 +41,7 @@ pipeline {
         }
         stage("update-deployment"){
             steps {
-                sshagent(credentials: ['aws-tomcat-creds']) {
+                sshagent(credentials: ['ec2-user']) {
                     script {
                         sh """                    
                              sed -i 's/petapp:latest/petapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml
