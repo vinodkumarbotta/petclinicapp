@@ -2,6 +2,7 @@
 ---
 - hosts: k8smaster
   become: True
+  gather_facts: false
   tasks:
      - name: Run k8s deployment
        shell: kubectl apply -f home/ubuntu/petclinicapp-deploy.yaml
