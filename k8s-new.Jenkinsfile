@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-            registry_url = "http://184.72.168.66:80"
-            registry = "184.72.168.66:80/javaapp/petapp"
+            //registry_url = "http://184.72.168.66:80"
+            registry = "184.72.168.66:80"
             registryCredential = 'venkat-harborhub'
             dockerImage = ''
     }
@@ -21,14 +21,14 @@ pipeline {
         stage('Building image') {
             steps{
               script {
-                dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                dockerImage = docker.build registry + "/javaapp/petapp" + ":$BUILD_NUMBER"
               }
             }
         }
         stage('Deploy Image') {
           steps{
             script {
-              docker.withRegistry(registry_url, registryCredential ) {
+              docker.withRegistry(registry, registryCredential ) {
                 dockerImage.push()
               }
             }
