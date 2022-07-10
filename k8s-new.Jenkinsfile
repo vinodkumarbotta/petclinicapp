@@ -39,7 +39,7 @@ pipeline {
             sh "docker rmi $registry:$BUILD_NUMBER"
           }
         }
-        stage("update-deployment"){
+        stage("update-k8s-deployment"){
             steps {
                 sshagent(credentials: ['ec2-user']) {
                     script {
@@ -52,7 +52,7 @@ pipeline {
                 }
             }
         }
-        stage(" execute Ansible") {
+        stage("Deploy-k8s-Ansible") {
           steps {
                 ansiblePlaybook credentialsId: 'ec2-user', disableHostKeyChecking: true, installation: 'Ansible', inventory: 'ansible-deploy/inventory', playbook: 'ansible-deploy/k8s-deploy.yaml'
           }    
