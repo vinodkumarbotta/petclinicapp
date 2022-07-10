@@ -22,7 +22,7 @@ spec:
 
        spec: 
           containers:
-            - image:  vsiraparapu/petclinicapp:latest
+            - image:  184.72.168.66:80/javaapp/petclinicapp:latest
               name:  petclinicapp
               ports:
                 - containerPort: 8080
