@@ -43,7 +43,8 @@ pipeline {
             steps {
                 sshagent(credentials: ['ec2-user']) {
                     script {
-                        sh """                    
+                        sh """         
+                             chmod -R 777 ansible-deploy/deploy.sh           
                              sed -i 's/petapp:latest/petapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml
                              scp -o StrictHostKeyChecking=no k8s-deployments/petclinicapp-deploy.yaml ubuntu@ec2-54-235-37-175.compute-1.amazonaws.com:/home/ubuntu/
                              scp -pr -o StrictHostKeyChecking=no ansible-deploy/deploy.sh ubuntu@ec2-54-235-37-175.compute-1.amazonaws.com:/home/ubuntu/
