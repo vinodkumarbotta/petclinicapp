@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+            registry_url = "http://184.72.168.66:80"
             registry = "184.72.168.66:80/javaapp/petapp"
             registryCredential = 'venkat-harborhub'
             dockerImage = ''
@@ -27,7 +28,7 @@ pipeline {
         stage('Deploy Image') {
           steps{
             script {
-              docker.withRegistry('http://184.72.168.66:80', registryCredential ) {
+              docker.withRegistry(registry_url, registryCredential ) {
                 dockerImage.push()
               }
             }
@@ -38,17 +39,17 @@ pipeline {
             sh "docker rmi $registry:$BUILD_NUMBER"
           }
         }
-        // stage('Deploy on K8S') {
-        //  steps {
-        //     script {
-        //        sh "sed -i 's/petclinicapp:latest/petclinicapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml"
-        //        kubernetesDeploy kubeconfigId: 'k8s-config', 
-        //        configs: 'k8s-deployments/petclinicapp-deploy.yaml',
-        //        enableConfigSubstitution: true
+        stage('Deploy on K8S') {
+         steps {
+            script {
+               sh "sed -i 's/petclinicapp:latest/petapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml"
+               kubernetesDeploy kubeconfigId: 'k8s-harbor-config', 
+               configs: 'k8s-deployments/petclinicapp-deploy.yaml',
+               enableConfigSubstitution: true
 
-        //     }
-        //  }
-        // }
+            }
+         }
+        }
         
     }
 
