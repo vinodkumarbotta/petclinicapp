@@ -36,7 +36,7 @@ pipeline {
         }
         stage('Remove Old Images') {
           steps{
-            sh "docker rmi $registry:$BUILD_NUMBER"
+            sh "docker rmi http://${registry}:${BUILD_NUMBER}"
           }
         }
         stage("update-k8s-deployment"){
