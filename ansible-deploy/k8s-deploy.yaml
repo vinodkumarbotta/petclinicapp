@@ -3,11 +3,14 @@
 - hosts: k8s-master 
   become: True
   tasks:
-     - name: Clone a github repository
-       git:
-        repo: https://github.com/crazy4devops/spring-framework-petclinic.git
-        dest: /home/ubuntu
-        single_branch: yes
-        version: 'feature/test'
-        clone: yes
-        update: yes
+     - name: "Display"
+       cmd: "uname -a"
+       
+    #  - name: Clone a github repository
+    #    git:
+    #     repo: https://github.com/crazy4devops/spring-framework-petclinic.git
+    #     dest: /home/ubuntu
+    #     single_branch: yes
+    #     version: 'feature/test'
+    #     clone: yes
+    #     update: yes
