@@ -42,7 +42,7 @@ pipeline {
         stage('Deploy on K8S') {
          steps {
             script {
-               sh "sed -i 's/petclinicapp:latest/petapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml"
+               sh "sed -i 's/petapp:latest/petapp:${env.BUILD_NUMBER}/g' k8s-deployments/petclinicapp-deploy.yaml"
                kubernetesDeploy kubeconfigId: 'k8s-harbor-config', 
                configs: 'k8s-deployments/petclinicapp-deploy.yaml',
                enableConfigSubstitution: true
