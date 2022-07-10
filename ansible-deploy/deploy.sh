@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl apply -f home/ubuntu/petclinicapp-deploy.yaml
+kubectl --kubeconfig=/home/ubuntu/.kube/config apply -f home/ubuntu/petclinicapp-deploy.yaml 
