@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
 
-            registry = "184.72.168.66:80"
+            registry = "54.172.157.73"
             registryCredential = 'venkat-harborhub'
             dockerImage = ''
     }
